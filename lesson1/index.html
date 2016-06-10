@@ -6,14 +6,12 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
   <style type="text/css">
 
-    body
-    {
+    body {
       padding-top: 50px;
       padding-left: 100px;
     }
 
-    .bar
-    {
+    .bar {
       display: inline-block;
       width: 20px;
       height: 75px; /* Gets overriden by D3-assigned height below */
@@ -24,6 +22,15 @@
   </style>
 </head>
 <body>
+  <script type="text/javascript">
+    var dataset = [5, 10, 15, 20, 25];
+    d3.select ('body').selectAll('div')
+      .data('dataset')
+      .enter()
+      .appent('div')
+
+      
+  </script>
 
 </body>
 </html>
