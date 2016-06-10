@@ -31,8 +31,6 @@
     var dataset = _.map(_.range(15), function(i){
       return Math.random() * 50; 
      });
-    //map function is from underscore.js - http://underscorejs.org/#map - this is getting 15 random numbers. 
-    //range function is also from understore.js -http://underscorejs.org/#range
     var w = 400, h = 300;
     console.log(dataset);
 
@@ -40,13 +38,20 @@
     .attr('width', w)
     .attr('height', h);
 
+  var xScale = d3.scale.ordinal() 
+    // more info on ordinal scales here https://github.com/d3/d3/wiki/Ordinal-Scales 
+    // scale that orders things. a linear scale has discrete domain where it maps things, according to their psotiioning. So it'll sort  
+    .domain(dataset)
+    .rangeBands([0, w], .2, 0)
+    //above: the .2 adds padding between each bar in the chart. 0 no padding; 1 all padding [? unusable];
+    //.5 would equal the actual width of the bars themselves. 
+    //the final argument: padding on the outsides of the bars - either side. 
+
+    
+
+
   var yScale = d3.scale.linear()
     .domain([0, d3.max(dataset) * 1.1])
-
-    //previously this upper domain was a static number; this means that all the values in array can fit without overflowing the svg
-    //this isa way to adjust it on the fly
-    //using d3.max(dataset) means that the largest val is always touching the top of the chart.
-    //but now we have  d3.max(dataset) * 1.1, which means there's always an additional 10% up top to pad the bar of the largest val. 
     .range([0, h])
 
 
@@ -58,16 +63,22 @@
     .append('rect')
     .attr('class', 'bar')
     .attr('x', function (d, i) {
-      return i * 22;
+      return xScale(d);
+      // pre viously we'd been multiplying by 22 to get x position - so each bar displays 22px offset from the start of the previous one. 
+      // now we're distributing them evenly across the entire csv, using math.  
     })
     .attr('y', function (d) {
       return h - yScale(d);
     })
-    .attr('width', 20)
+    .attr('width', xScale.rangeBand())
+    // ('width', xScale.rangeBand())
     .attr('height', function (d) {
       // return d * multiplier;
       return yScale(d);
     });
+
+
+
   </script>
 
 </body>
