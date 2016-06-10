@@ -18,23 +18,20 @@
       margin-right: 2px;
       background-color: teal;
     }
-    div {
-      border: 1px solid blue;
-      width: 100px;
-      height: 100px;
-    }
 
   </style>
 </head>
 <body>
   <script type="text/javascript">
-    var dataset = [5, 10, 15];
+    var dataset = [5, 10, 15, 20, 25];
     d3.select ('body').selectAll('div')
       .data(dataset)
       .enter()
       .append ('div')
-      console.log(stuff);
-      // .attr('class', 'bar')
+      .attr('class', 'bar')
+      .style('height', function(d) {
+        return d * 7 + 'px'
+      });
 
 
   </script>
