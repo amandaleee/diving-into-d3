@@ -35,6 +35,13 @@
     .attr('width', w)
     .attr('height', h);
 
+  var yScale = d3.scale.linear() //d3 has other scales besides linear - see here https://github.com/d3/d3/wiki/Quantitative-Scales
+    .domain([0, 25])//min 0 max 25
+    .range([0, h])//range is 0 to height. 
+    //a scale is a function that takes a value in an input domain, and maps it to a value in an output range. 
+    //in our case here, any val passed into this scale will be mapped to domain of 0-25, and depending on where they fall, that'll be mapped to a value between 0 and the height. 
+    //if you pass in a val that doesn't fit in this range, it'll still do the mapping based on those proportions. 
+
   var multiplier = 8;
 
   svg.selectAll('rect')
@@ -46,11 +53,12 @@
       return i * 22;
     })
     .attr('y', function (d) {
-      return 300 - d * multiplier;
+      return h - yScale(d);
     })
     .attr('width', 20)
     .attr('height', function (d) {
-      return d * multiplier;
+      // return d * multiplier;
+      return yScale(d);
     });
 
 
