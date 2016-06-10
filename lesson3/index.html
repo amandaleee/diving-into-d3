@@ -41,6 +41,7 @@
     //a scale is a function that takes a value in an input domain, and maps it to a value in an output range. 
     //in our case here, any val passed into this scale will be mapped to domain of 0-25, and depending on where they fall, that'll be mapped to a value between 0 and the height. 
     //if you pass in a val that doesn't fit in this range, it'll still do the mapping based on those proportions. 
+    // the top val in the domain is 25, which is the greatest in our data set, which means when this renders the bar chart will fill the entire SVG - we can set the max domain to 50 if we want the bar chart to be half as big as the svg, etc etc etc
 
   var multiplier = 8;
 
@@ -54,6 +55,7 @@
     })
     .attr('y', function (d) {
       return h - yScale(d);
+      //pins columns to the bottom: if you did something like h -40 -yScale(d), they'd move up by 40px above the bottom of the svg.
     })
     .attr('width', 20)
     .attr('height', function (d) {
