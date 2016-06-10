@@ -29,11 +29,11 @@
   <div id="chartArea">
   </div><!--/chartArea-->
   <script type="text/javascript">
-    var dataset = [ 5, 10, 15, 20, 25 ];
+    var dataset = [ 5, 10, 15, 20, 25 ], w = 400, h = 300;
 
   var svg = d3.select('#chartArea').append('svg')
-    .attr('width', 400)
-    .attr('height', 300);
+    .attr('width', w)
+    .attr('height', h);
 
   var multiplier = 8;
 
