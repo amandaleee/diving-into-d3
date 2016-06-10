@@ -31,16 +31,22 @@
     var dataset = _.map(_.range(15), function(i){
       return Math.random() * 50; 
      });
-    //map function is from underscore.js - http://underscorejs.org/#map
+    //map function is from underscore.js - http://underscorejs.org/#map - this is getting 15 random numbers. 
     //range function is also from understore.js -http://underscorejs.org/#range
     var w = 400, h = 300;
+    console.log(dataset);
 
   var svg = d3.select('#chartArea').append('svg')
     .attr('width', w)
     .attr('height', h);
 
   var yScale = d3.scale.linear()
-    .domain([0, 25])
+    .domain([0, d3.max(dataset) * 1.1])
+
+    //previously this upper domain was a static number; this means that all the values in array can fit without overflowing the svg
+    //this isa way to adjust it on the fly
+    //using d3.max(dataset) means that the largest val is always touching the top of the chart.
+    //but now we have  d3.max(dataset) * 1.1, which means there's always an additional 10% up top to pad the bar of the largest val. 
     .range([0, h])
 
 
