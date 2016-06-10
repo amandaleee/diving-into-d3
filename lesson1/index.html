@@ -6,24 +6,56 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
   <style type="text/css">
 
-    body
-    {
+    body {
       padding-top: 50px;
       padding-left: 100px;
     }
 
-    .bar
-    {
+    .bar {
       display: inline-block;
       width: 20px;
-      height: 75px; /* Gets overriden by D3-assigned height below */
+      /*there used to be a height here; i deleted it bc we're setting it in the svg below*/
       margin-right: 2px;
-      background-color: teal;
+      fill: teal;
+    }
+    #chartArea svg{
+      background-color: silver;
+      fill: silver;
     }
 
   </style>
 </head>
 <body>
+  <div id="chartArea">
+  </div><!--/chartArea-->
+  <script type="text/javascript">
+    var dataset = [ 5, 10, 15, 20, 25 ];
+
+  var svg = d3.select('#chartArea').append('svg')
+    .attr('width', 400)
+    .attr('height', 300);
+
+  var multiplier = 8;
+
+  svg.selectAll('rect')
+    .data(dataset)
+    .enter()
+    .append('rect')
+    .attr('class', 'bar')
+    .attr('x', function (d, i) {
+      return i * 22;
+    })
+    .attr('y', function (d) {
+      return 300 - d * multiplier;
+    })
+    .attr('width', 20)
+    .attr('height', function (d) {
+      return d * multiplier;
+    });
+
+
+
+  </script>
 
 </body>
 </html>
