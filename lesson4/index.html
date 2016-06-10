@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>D3 - Data Driven Documents</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.16/d3.js" charset="utf-8"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+  <script src="https://jashkenas.github.io/underscore/underscore-min.js"></script>
+  <style type="text/css">
+    body {
+      padding-top: 50px;
+      padding-left: 100px;
+    }
+
+    .bar {
+      display: inline-block;
+      width: 20px;
+      margin-right: 2px;
+      fill: teal;
+    }
+    #chartArea svg{
+      background-color: silver;
+      fill: silver;
+    }
+
+  </style>
+</head>
+<body>
+  <div id="chartArea">
+  </div><!--/chartArea-->
+  <script type="text/javascript">
+    var dataset = _.map(_.range(15), function(i){
+      return Math.random() * 50; 
+     });
+    //map function is from underscore.js - http://underscorejs.org/#map - this is getting 15 random numbers. 
+    //range function is also from understore.js -http://underscorejs.org/#range
+    var w = 400, h = 300;
+    console.log(dataset);
+
+  var svg = d3.select('#chartArea').append('svg')
+    .attr('width', w)
+    .attr('height', h);
+
+  var yScale = d3.scale.linear()
+    .domain([0, d3.max(dataset) * 1.1])
+
+    //previously this upper domain was a static number; this means that all the values in array can fit without overflowing the svg
+    //this isa way to adjust it on the fly
+    //using d3.max(dataset) means that the largest val is always touching the top of the chart.
+    //but now we have  d3.max(dataset) * 1.1, which means there's always an additional 10% up top to pad the bar of the largest val. 
+    .range([0, h])
+
+
+  var multiplier = 8;
+
+  svg.selectAll('rect')
+    .data(dataset)
+    .enter()
+    .append('rect')
+    .attr('class', 'bar')
+    .attr('x', function (d, i) {
+      return i * 22;
+    })
+    .attr('y', function (d) {
+      return h - yScale(d);
+    })
+    .attr('width', 20)
+    .attr('height', function (d) {
+      // return d * multiplier;
+      return yScale(d);
+    });
+
+
+
+  </script>
+
+</body>
+</html>
