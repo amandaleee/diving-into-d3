@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>D3 - Data Driven Documents</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.16/d3.js" charset="utf-8"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+  <script src="https://jashkenas.github.io/underscore/underscore-min.js"></script>
+  <style type="text/css">
+    body {
+      padding-top: 50px;
+      padding-left: 100px;
+    }
+    .bar {
+      display: inline-block;
+    }
+    #chartArea svg{
+      background-color: #ffc8d2;
+      border:1px solid silver;
+    }
+    .bubble {
+      display: inline-block;
+      /*stroke: silver;*/
+      opacity: .7;
+      /*stroke-weight: 1px;*/
+    }
+    /*new style above for bubble*/
+
+  </style>
+</head>
+<body>
+  <div id="chartArea">
+  </div><!--/chartArea-->
+  <script type="text/javascript">
+    var dataset = _.map(_.range(50), function(i){
+      return {
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        r: Math.random() * 30
+        //notes go here
+      };
+     });
+    var margin = {top:20, right:20, bottom:20, left:20}, 
+        w = 400 - margin.left - margin.right, 
+        h = 300 - margin.top - margin.bottom;
+
+  var svg = d3.select('#chartArea').append('svg')
+    .attr('width', w + margin.left + margin.right)
+    .attr('height', h + margin.top + margin.bottom)
+    .append('g')
+    .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+
+  var xScale = d3.scale.linear()
+  // changed this back to linear
+    .domain([0,100])
+    .range([0, w]);
+    //no more rangeBands - just range here
+  
+
+  var yScale = d3.scale.linear()
+    // previously this line was 
+    // .domain([0, d3.max(dataset) * 1.1])
+    // since dataset is now objects and not nubmers, we're telling d3 which property of the data obj that we're going to use here - that's what d.y is about. 
+    .domain([0, d3.max(dataset, function(d){
+      return d.y;
+    })])
+    .range([0, h])
+
+  var colorScale = d3.scale.linear()
+    .domain([0, dataset.length])
+    .range(['slateblue' , 'mediumseagreen'])
+
+  var multiplier = 8;
+
+  svg.selectAll('circle')
+    .data(dataset)
+    .enter()
+    //add a circle to the svg below - previously this was a rect
+    .append('circle')
+    //add class of bubble 
+    .attr('class', 'bubble')
+    //below, cx and cy stand for centerX and centerY
+    //b/c we're not using numbers, but objects, we're creating functions that pass the correct property into our x and y scales. 
+    .attr('cx', function(d) {
+      return xScale(d.x);
+    })
+    .attr('cy', function(d){
+      return yScale(d.y);
+    })
+    //r = radius of the circle. 
+    .attr('r', function(d){
+      return d.r;
+    })
+    
+    //this is the colorscale fill - gonna leave this on until the end of time <3 <3
+    .attr('fill', function(d, i){
+        return colorScale(i);
+    })
+   
+
+
+  </script>
+
+</body>
+</html>
