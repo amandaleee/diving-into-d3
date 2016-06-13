@@ -77,15 +77,10 @@
     .attr('height', function (d) {
       return yScale(d);
     })
-    // .attr('fill',colorScale)
-    //the above is the same as: 
     .attr('fill', function(d, i){
         return colorScale(i);
     })
-    // except shorthand. 
-    //you could also say return colorScale(i) and then above in the colorscale domain, use 
-    // .domain([0, dataset.length])
-    // - what this will do is give you a gradient across the bars from orange to purple left to right, rather than based on the height of the bar. 
+   
 
 
   </script>
