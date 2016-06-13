@@ -47,14 +47,15 @@
 
   var colorScale = d3.scale.linear()
     // .domain([0, d3.max(dataset)])
+    //the above will apply colors according to the bars' heights - on the svg below, you need to return colorScale(d);
     .domain([0, dataset.length])
+    //the above will apply colors according to left to right - on the svg below, you need to return colorScale(i);
     .range(['orange', 'purple'])
     // this goes smallest to largest - smallest is orange and largest is purple. 
     // .range(['#0894db', '#f3701f'])
     //tried this above with blue/orange and it sucked
 
 
-  //another alternate usage of 
 
 
   var multiplier = 8;
