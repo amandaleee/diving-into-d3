@@ -30,15 +30,19 @@
     var dataset = _.map(_.range(30), function(i){
       return Math.random() * 50; 
      });
-    var margin = {top:20, right:20, bottom:20, left:20}
-    var w = 400 - margin.left - margin.right
-    var h = 300 - margin.top - margin.bottom;
+    var margin = {top:20, right:20, bottom:20, left:20},
+    //when you alter these values, that adjusts the margin.  
+        w = 400 - margin.left - margin.right, 
+        h = 300 - margin.top - margin.bottom;
 
   var svg = d3.select('#chartArea').append('svg')
     .attr('width', w + margin.left + margin.right)
     .attr('height', h + margin.top + margin.bottom)
+    //these attrs create the svg tag with margins so it can appropriately fill the #chartArea div
     .append('g')
-    .attr('transform', 'translate(' + margin.left + margin.top +')')
+    //append a <g> element into the svg
+    .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+    //what this outputs is translate(20, 20) [where 20 is the value we set in the margin object above]
 
   var xScale = d3.scale.ordinal() 
     .domain(dataset)
