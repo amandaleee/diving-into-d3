@@ -42,7 +42,7 @@
     // more info on ordinal scales here https://github.com/d3/d3/wiki/Ordinal-Scales 
     // scale that orders things. a linear scale has discrete domain where it maps things, according to their psotiioning. So it'll sort  
     .domain(dataset)
-    .rangeBands([0, w], .2, 0)
+    .rangeBands([0, w], .2, .2)
     //above: the .2 adds padding between each bar in the chart. 0 no padding; 1 all padding [? unusable];
     //.5 would equal the actual width of the bars themselves. 
     //the final argument: padding on the outsides of the bars - either side. 
