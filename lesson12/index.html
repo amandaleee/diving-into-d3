@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>D3 - Data Driven Documents</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.16/d3.js" charset="utf-8"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+  <script src="https://jashkenas.github.io/underscore/underscore-min.js"></script>
+  <style type="text/css">
+    body {
+      padding-top: 50px;
+      padding-left: 100px;
+    }
+    .bar {
+      display: inline-block;
+    }
+    #chartArea svg{
+      background-color: #ffc8d2;
+      border:1px solid silver;
+    }
+    .bubble {
+      display: inline-block;
+      opacity: .7;
+    }
+    .purple {
+      fill: purple;
+    }
+    .update {
+      margin-bottom: 20px; 
+      width: 400px; 
+    }
+  </style>
+</head>
+<body>
+  <button class="update" onclick="update()">Update this !#*$ing chart! </button>
+  <div id="chartArea">
+  </div><!--/chartArea-->
+  
+  <script type="text/javascript">
+  function update() {
+    console.log("updating");
+    _.each(dataset, function(datum) {
+      //loop over dataset with underscore/lodash, and get a new rand number for each
+      datum.x = Math.round(Math.random() * 100);
+      datum.y = Math.round(Math.random() * 100);
+      datum.r = Math.round(Math.random() * 30);
+    })
+
+     var colorScale = d3.scale.linear()
+      .domain([0, dataset.length])
+      .range(['teal' , 'purple']); //variable for later on down when we're animating the colors
+      //to get the chart to re-render, we have to update properties on the svg: 
+    svg.selectAll('circle')
+    // transition/duration/delay methods here, so the dots don't just jump around. 
+      .transition()
+      .duration(500)
+      // // .delay(250) - static delay value isn't that impressive so here
+      // .delay(function(d, i){
+      //   return i*50; //this uses index to create a stagger. 
+      // })
+      .ease('bounce') //http://bl.ocks.org/hunzy/9929724 here's some movement examples. 
+      .attr('cx', function(d) {
+        return xScale(d.x);
+      })
+      //putting these transitions/durations between functions makes them go in order. 
+      .transition()
+      .duration(500)
+      .attr('cy', function(d){
+        return yScale(d.y);
+      })
+      .transition()
+      .duration(500)
+      .attr('r', function(d){
+        return d.r;
+      })
+      // .style("fill", "purple");//animates a color change
+      .attr('fill', function(d, i){
+        return colorScale(i);
+      });
+  }
+
+    var dataset = _.map(_.range(50), function(i){
+      return {
+        x: Math.round(Math.random() * 100),
+        y: Math.round(Math.random() * 100),
+        r: Math.round(Math.random() * 30)
+      };
+     });
+    var margin = {top:20, right:20, bottom:20, left:20}, 
+        w = 400 - margin.left - margin.right, 
+        h = 300 - margin.top - margin.bottom;
+
+  var svg = d3.select('#chartArea').append('svg')
+    .attr('width', w + margin.left + margin.right)
+    .attr('height', h + margin.top + margin.bottom)
+    .append('g')
+    .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+
+  var xScale = d3.scale.linear()
+    .domain([0,100])
+    .range([0, w]);
+  
+
+  var yScale = d3.scale.linear()
+    .domain([0, d3.max(dataset, function(d){
+      return d.y;
+    })])
+    .range([0, h])
+
+  var colorScale = d3.scale.linear()
+    .domain([0, dataset.length])
+    .range(['slateblue' , 'mediumseagreen'])
+ 
+  svg.selectAll('circle')
+    .data(dataset)
+    .enter()
+    .append('circle')
+    .attr('class', 'bubble')
+    .attr('cx', function(d) {
+      return xScale(d.x);
+    })
+    .attr('cy', function(d){
+      return yScale(d.y);
+    })
+    .attr('r', function(d){
+      return d.r;
+    })
+    .attr('fill', function(d, i){
+        return colorScale(i);
+    })
+    .on('mouseover', function(d){
+        d3.select(this).classed("purple", true);
+    })
+    .on('mouseout', function(d) {
+      d3.select(this).classed("purple", false);
+    })
+    .on('mousedown', function(d){
+        d3.select(this).attr('r', d.r*2);
+    })
+    .on('mouseup', function(d) {
+      d3.select(this).attr('r', d.r);
+
+    });
+
+
+  </script>
+
+</body>
+</html>
