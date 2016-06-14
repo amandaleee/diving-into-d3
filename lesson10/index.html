@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>D3 - Data Driven Documents</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.16/d3.js" charset="utf-8"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+  <script src="https://jashkenas.github.io/underscore/underscore-min.js"></script>
+  <style type="text/css">
+    body {
+      padding-top: 50px;
+      padding-left: 100px;
+    }
+    .bar {
+      display: inline-block;
+    }
+    #chartArea svg{
+      background-color: #ffc8d2;
+      border:1px solid silver;
+    }
+    .bubble {
+      display: inline-block;
+      opacity: .7;
+    }
+    .purple {
+      fill: purple;
+    }
+  </style>
+</head>
+<body>
+  <div id="chartArea">
+  </div><!--/chartArea-->
+  <script type="text/javascript">
+    var dataset = _.map(_.range(50), function(i){
+      return {
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        r: Math.random() * 30
+      };
+     });
+    var margin = {top:20, right:20, bottom:20, left:20}, 
+        w = 400 - margin.left - margin.right, 
+        h = 300 - margin.top - margin.bottom;
+
+  var svg = d3.select('#chartArea').append('svg')
+    .attr('width', w + margin.left + margin.right)
+    .attr('height', h + margin.top + margin.bottom)
+    .append('g')
+    .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+
+  var xScale = d3.scale.linear()
+    .domain([0,100])
+    .range([0, w]);
+  
+
+  var yScale = d3.scale.linear()
+    .domain([0, d3.max(dataset, function(d){
+      return d.y;
+    })])
+    .range([0, h])
+
+  var colorScale = d3.scale.linear()
+    .domain([0, dataset.length])
+    .range(['slateblue' , 'mediumseagreen'])
+
+  var multiplier = 8;
+  //we're adding interactivity here. 
+  svg.selectAll('circle')
+    .data(dataset)
+    .enter()
+    .append('circle')
+    .attr('class', 'bubble')
+    .attr('cx', function(d) {
+      return xScale(d.x);
+    })
+    .attr('cy', function(d){
+      return yScale(d.y);
+    })
+    .attr('r', function(d){
+      return d.r;
+    })
+    .attr('fill', function(d, i){
+        return colorScale(i);
+    })
+    .on('mouseover', function(d){
+      // d3.select(this).style('fill', 'purple') - this is less ideal
+        d3.select(this).classed("purple", true);
+    })
+    .on('mouseout', function(d) {
+      // d3.select(this).style('fill','teal');
+      d3.select(this).classed("purple", false);
+    })
+    .on('mousedown', function(d){
+        d3.select(this).attr('r', d.r*2);
+        //when we mousedown here, we're setting the radius property to 2*what it was. 
+    })
+    .on('mouseup', function(d) {
+      d3.select(this).attr('r', d.r);
+        //when we mouseup, it goes back to what it was. 
+
+        //real talk, idk that i would do this - this is really choppy and weird. will look at other ways to do this. 
+    });
+
+
+  </script>
+
+</body>
+</html>
