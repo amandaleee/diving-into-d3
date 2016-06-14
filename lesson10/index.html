@@ -21,6 +21,9 @@
       display: inline-block;
       opacity: .7;
     }
+    .purple {
+      fill: purple;
+    }
   </style>
 </head>
 <body>
@@ -60,7 +63,7 @@
     .range(['slateblue' , 'mediumseagreen'])
 
   var multiplier = 8;
-
+  //we're adding interactivity here. 
   svg.selectAll('circle')
     .data(dataset)
     .enter()
@@ -78,7 +81,24 @@
     .attr('fill', function(d, i){
         return colorScale(i);
     })
-   
+    .on('mouseover', function(d){
+      // d3.select(this).style('fill', 'purple') - this is less ideal
+        d3.select(this).classed("purple", true);
+    })
+    .on('mouseout', function(d) {
+      // d3.select(this).style('fill','teal');
+      d3.select(this).classed("purple", false);
+    })
+    .on('mousedown', function(d){
+        d3.select(this).attr('r', d.r*2);
+        //when we mousedown here, we're setting the radius property to 2*what it was. 
+    })
+    .on('mouseup', function(d) {
+      d3.select(this).attr('r', d.r);
+        //when we mouseup, it goes back to what it was. 
+
+        //real talk, idk that i would do this - this is really choppy and weird. will look at other ways to do this. 
+    });
 
 
   </script>
