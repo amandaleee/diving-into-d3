@@ -46,6 +46,15 @@
     })
       //to get the chart to re-render, we have to update properties on the svg: 
     svg.selectAll('circle')
+    // transition/duration/delay methods here, so the dots don't just jump around. 
+      .transition()
+      .duration(500)
+      // .delay(250) - static delay value isn't that impressive so here
+      .delay(function(d, i){
+        return i*50;
+        //this uses index to create a stagger. 
+      })
+      .ease('bounce') //http://bl.ocks.org/hunzy/9929724 here's some movement examples. 
       .attr('cx', function(d) {
         return xScale(d.x);
       })
