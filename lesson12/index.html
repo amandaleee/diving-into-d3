@@ -44,25 +44,37 @@
       datum.y = Math.round(Math.random() * 100);
       datum.r = Math.round(Math.random() * 30);
     })
+
+     var colorScale = d3.scale.linear()
+      .domain([0, dataset.length])
+      .range(['teal' , 'purple']); //variable for later on down when we're animating the colors
       //to get the chart to re-render, we have to update properties on the svg: 
     svg.selectAll('circle')
     // transition/duration/delay methods here, so the dots don't just jump around. 
       .transition()
       .duration(500)
-      // .delay(250) - static delay value isn't that impressive so here
-      .delay(function(d, i){
-        return i*50;
-        //this uses index to create a stagger. 
-      })
+      // // .delay(250) - static delay value isn't that impressive so here
+      // .delay(function(d, i){
+      //   return i*50; //this uses index to create a stagger. 
+      // })
       .ease('bounce') //http://bl.ocks.org/hunzy/9929724 here's some movement examples. 
       .attr('cx', function(d) {
         return xScale(d.x);
       })
+      //putting these transitions/durations between functions makes them go in order. 
+      .transition()
+      .duration(500)
       .attr('cy', function(d){
         return yScale(d.y);
       })
+      .transition()
+      .duration(500)
       .attr('r', function(d){
         return d.r;
+      })
+      // .style("fill", "purple");//animates a color change
+      .attr('fill', function(d, i){
+        return colorScale(i);
       });
   }
 
